@@ -83,6 +83,7 @@
         </thead>
         <tbody>
         <?php  
+            // menyiapkan perintah SQL untuk pengambilan data kelas, join dengan jurusan
             $res_kls = $db->prepare("SELECT kelas.*, 
                                         kelas.nama AS nama_kelas,
                                         jurusan.nama AS nama_jurusan 
