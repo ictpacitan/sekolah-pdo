@@ -7,6 +7,8 @@
     <title>Data Kelas</title>
     <!-- Bootstrap CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj3OJU5yExlq6GSYGSHk7tPFijrQlT0OdZ3Ciy985=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </head>
 <body class="p-4">
@@ -117,38 +119,31 @@
     </table>
 
 <script>
-document.addEventListener('DOMContentLoaded', function(){
-    var modalEl = document.getElementById('kelasModal');
-    var bsModal = new bootstrap.Modal(modalEl);
+$(document).ready(function(){
+    var modalEl = $('#kelasModal');
+    var bsModal = new bootstrap.Modal(modalEl[0]);
 
     // Setup "Tambah Kelas" button to reset form
-    var tambahBtn = document.querySelector('button[data-bs-target="#kelasModal"]');
-    if (tambahBtn) {
-        tambahBtn.addEventListener('click', function(){
-            document.getElementById('kelas_id').value = '';
-            document.getElementById('nama').value = '';
-            var radio = document.querySelector('input[name="tingkat"][value="10"]');
-            if (radio) radio.checked = true;
-            document.getElementById('jurusan_id').selectedIndex = 0;
-            document.getElementById('kelasModalLabel').textContent = 'Tambah Kelas';
-            modalEl.querySelector('.modal-footer .btn-primary').textContent = 'Simpan';
-        });
-    }
+    $('button[data-bs-target="#kelasModal"]').on('click', function(){
+        $('#kelas_id').val('');
+        $('#nama').val('');
+        $('input[name="tingkat"][value="10"]').prop('checked', true);
+        $('#jurusan_id').prop('selectedIndex', 0);
+        $('#kelasModalLabel').text('Tambah Kelas');
+        modalEl.find('.modal-footer .btn-primary').text('Simpan');
+    });
 
     // Edit buttons
-    document.querySelectorAll('.edit-btn').forEach(function(btn){
-        btn.addEventListener('click', function(){
-            document.getElementById('kelas_id').value = btn.dataset.id || '';
-            document.getElementById('nama').value = btn.dataset.nama || '';
-            var tingkat = btn.dataset.tingkat || '10';
-            var tingkatInput = document.querySelector('input[name="tingkat"][value="'+tingkat+'"]');
-            if (tingkatInput) tingkatInput.checked = true;
-            var jurusanSelect = document.getElementById('jurusan_id');
-            if (jurusanSelect && btn.dataset.jurusan) jurusanSelect.value = btn.dataset.jurusan;
-            document.getElementById('kelasModalLabel').textContent = 'Edit Kelas';
-            modalEl.querySelector('.modal-footer .btn-primary').textContent = 'Update';
-            bsModal.show();
-        });
+    $(document).on('click', '.edit-btn', function(){
+        var btn = $(this);
+        $('#kelas_id').val(btn.data('id') || '');
+        $('#nama').val(btn.data('nama') || '');
+        var tingkat = btn.data('tingkat') || '10';
+        $('input[name="tingkat"][value="' + tingkat + '"]').prop('checked', true);
+        $('#jurusan_id').val(btn.data('jurusan') || '');
+        $('#kelasModalLabel').text('Edit Kelas');
+        modalEl.find('.modal-footer .btn-primary').text('Update');
+        bsModal.show();
     });
 });
 </script>
